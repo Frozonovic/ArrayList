@@ -1,22 +1,20 @@
 /**
  * A custom version ArrayList class modeled after default ArrayList class
  *
- * @param <E>
+ * @author blee20@georgefox.edu
+ * @param <E> The type of elements in this list
  */
 public class ArrayList<E>
 {
     // Constants
     private static final int DEFAULT_CAPACITY = 10;
-    private static final int DEFAULT_RETURN = -1;
-    private static final int LOW_BOUND = 0;
-    private static final int ITERATION = 1;
+    private static final int NOT_FOUND = -1;
     private static final int DOUBLE = 2;
 
 
 
     // Instance Variables
     private int _size = 0;
-    private int _capacity;
     private E[] _backingArray;
 
 
@@ -34,24 +32,22 @@ public class ArrayList<E>
      * Creates an instance of class ArrayList object
      *
      * @param initialCapacity Starting capacity for new ArrayList instance
-     * @throws IllegalArgumentException Throws if initialCapacity input is invalid
      */
     @SuppressWarnings("unchecked")
-    public ArrayList(int initialCapacity) throws IllegalArgumentException
+    public ArrayList(int initialCapacity)
     {
-        if (initialCapacity < LOW_BOUND)
+        if (initialCapacity < 0)
         {
-            throw new IllegalArgumentException("Error: Initial capacity must be greater than or equal to 0");
+            throw new IllegalArgumentException("Error: Initial capacity must be greater than or" +
+                    "equal to 0");
         }
-        else if (initialCapacity == LOW_BOUND)
+        else if (initialCapacity == 0)
         {
-            _capacity = DEFAULT_CAPACITY;
             _backingArray = (E[]) new Object[DEFAULT_CAPACITY];
         }
 
         else
         {
-            _capacity = initialCapacity;
             _backingArray = (E[]) new Object[initialCapacity];
         }
     }
@@ -63,17 +59,18 @@ public class ArrayList<E>
      *
      * @param index Index to insert element at
      * @param element Element to insert into backing array
-     * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
      */
-    public void add(int index, E element) throws IndexOutOfBoundsException
+    public void add(int index, E element)
     {
-        if (index < LOW_BOUND || index > _size)
+        if (index < 0 || index > _size)
         {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         }
 
         else if (index == _size)
         {
+            grow();
+
             add(element);
         }
 
@@ -83,12 +80,12 @@ public class ArrayList<E>
 
             for (int i = _size; i > index; i--)
             {
-                E elementToAdd = get(i - ITERATION);
+                E elementToAdd = get(i - 1);
                 _backingArray[i] = elementToAdd;
             }
 
             _backingArray[index] = element;
-            _size += ITERATION;
+            _size += 1;
         }
     }
 
@@ -102,8 +99,10 @@ public class ArrayList<E>
     public boolean add(E element)
     {
         grow();
+
         _backingArray[_size] = element;
-        _size += ITERATION;
+        _size += 1;
+
         return true;
     }
 
@@ -113,12 +112,12 @@ public class ArrayList<E>
      */
     public void clear()
     {
-        for (int i = LOW_BOUND; i < _size; i++)
+        for (int i = 0; i < _size; i++)
         {
-            add(i, null);
+            _backingArray[i] = null;
         }
 
-        _size = LOW_BOUND;
+        _size = 0;
     }
 
 
@@ -127,11 +126,10 @@ public class ArrayList<E>
      *
      * @param index Index of element to fetch
      * @return The element at the given index
-     * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
      */
-    public E get(int index) throws IndexOutOfBoundsException
+    public E get(int index)
     {
-        if (index < LOW_BOUND || index >= _size)
+        if (index < 0 || index >= _size)
         {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         }
@@ -151,9 +149,9 @@ public class ArrayList<E>
      */
     public int indexOf(E element)
     {
-        int returnValue = DEFAULT_RETURN;
+        int returnValue = NOT_FOUND;
 
-        for (int i = LOW_BOUND; i < _size && returnValue == -1; i++)
+        for (int i = 0; i < _size && returnValue == NOT_FOUND; i++)
         {
             if (element == _backingArray[i])
             {
@@ -172,7 +170,7 @@ public class ArrayList<E>
      */
     public boolean isEmpty()
     {
-        return _size == LOW_BOUND;
+        return _size == 0;
     }
 
 
@@ -181,30 +179,29 @@ public class ArrayList<E>
      *
      * @param index Index of element to remove
      * @return The value of that index
-     * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
      */
-    public E remove(int index) throws IndexOutOfBoundsException
+    public E remove(int index)
     {
-        E returnIndex = _backingArray[index];
-
-        if (index < LOW_BOUND || index >= _size)
+        if (index < 0 || index >= _size)
         {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         }
 
         else
         {
-            _size -= ITERATION;
+            E returnIndex = _backingArray[index];
 
-            for (int i = LOW_BOUND; i < _size; i++)
+            for (int i = 0; i < _size - 1; i++)
             {
-                set(i, _backingArray[i + ITERATION]);
+                set(i, _backingArray[i + 1]);
             }
 
             set(_size, null);
+
+            return returnIndex;
         }
 
-        return returnIndex;
+
     }
 
 
@@ -214,23 +211,22 @@ public class ArrayList<E>
      * @param index Index of element to replace
      * @param element New element to replace current element with
      * @return Previous element at specified index
-     * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
      */
-    public E set(int index, E element) throws IndexOutOfBoundsException
+    public E set(int index, E element)
     {
-        E returnIndex = _backingArray[index];
-
-        if (index < LOW_BOUND || index >= _size)
+        if (index < 0 || index >= _size)
         {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         }
 
         else
         {
-            _backingArray[index] = element;
-        }
+            E returnIndex = _backingArray[index];
 
-        return returnIndex;
+            _backingArray[index] = element;
+
+            return returnIndex;
+        }
     }
 
 
@@ -252,17 +248,16 @@ public class ArrayList<E>
     @SuppressWarnings("unchecked")
     private void grow()
     {
-        if (_size == _capacity && _size < Integer.MAX_VALUE / 2)
+        if (_size == _backingArray.length && _size < Integer.MAX_VALUE / 2)
         {
-            _capacity *= DOUBLE;
-            E[] _tempArray = (E[]) new Object[_capacity];
+            E[] tempArray = (E[]) new Object[_backingArray.length * 2];
 
-            for (int i = LOW_BOUND; i < _size; i++)
+            for (int i = 0; i < _size; i++)
             {
-                _tempArray[i] = _backingArray[i];
+                tempArray[i] = _backingArray[i];
             }
 
-            _backingArray = _tempArray;
+            _backingArray = tempArray;
         }
     }
 }
