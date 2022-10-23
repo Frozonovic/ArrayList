@@ -1,16 +1,20 @@
+// Imports
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+
 /**
  * A custom version ArrayList class modeled after default ArrayList class
  *
  * @author blee20@georgefox.edu
  * @param <E> The type of elements in this list
  */
-public class ArrayList<E>
+public class ArrayList<E> implements Iterable<E>
 {
     // Constants
     private static final int DEFAULT_CAPACITY = 10;
     private static final int NOT_FOUND = -1;
     private static final int DOUBLE = 2;
-
 
 
     // Instance Variables
@@ -45,7 +49,6 @@ public class ArrayList<E>
         {
             _backingArray = (E[]) new Object[DEFAULT_CAPACITY];
         }
-
         else
         {
             _backingArray = (E[]) new Object[initialCapacity];
@@ -66,14 +69,12 @@ public class ArrayList<E>
         {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         }
-
         else if (index == _size)
         {
             grow();
 
             add(element);
         }
-
         else
         {
             grow();
@@ -114,7 +115,7 @@ public class ArrayList<E>
     {
         for (int i = 0; i < _size; i++)
         {
-            _backingArray[i] = null;
+            set(i, null);
         }
 
         _size = 0;
@@ -133,7 +134,6 @@ public class ArrayList<E>
         {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         }
-
         else
         {
             return _backingArray[index];
@@ -166,7 +166,7 @@ public class ArrayList<E>
     /**
      * Determines if the backing array is empty or not
      *
-     * @return Boolean value based on value of _size variable
+     * @return True if the collection is empty, else false
      */
     public boolean isEmpty()
     {
@@ -186,22 +186,21 @@ public class ArrayList<E>
         {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         }
-
         else
         {
-            E returnIndex = _backingArray[index];
+            E returnElement = _backingArray[index];
 
-            for (int i = 0; i < _size - 1; i++)
+            for (int i = index; i < _size - 1; i++)
             {
                 set(i, _backingArray[i + 1]);
             }
 
-            set(_size, null);
+            set(_size - 1, null);
 
-            return returnIndex;
+            _size--;
+
+            return returnElement;
         }
-
-
     }
 
 
@@ -218,14 +217,13 @@ public class ArrayList<E>
         {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         }
-
         else
         {
-            E returnIndex = _backingArray[index];
+            E returnElement = _backingArray[index];
 
             _backingArray[index] = element;
 
-            return returnIndex;
+            return returnElement;
         }
     }
 
@@ -241,6 +239,68 @@ public class ArrayList<E>
     }
 
 
+    /**
+     * Creates a new iterator
+     *
+     * @return An iterator of type E
+     */
+    public Iterator<E> iterator()
+    {
+        return new ArrayListIterator();
+    }
+
+
+    /**
+     * Private inner-class that adds support for enhanced for-loop notation
+     */
+    private class ArrayListIterator implements Iterator<E>
+    {
+        // Instance Variables
+        private int _index;
+
+
+        // Constructor
+        /**
+         * Creates an instance of private inner-class ArrayListIterator object
+         */
+        public ArrayListIterator()
+        {
+            _index = 0;
+        }
+
+
+        // Instance Methods
+        /**
+         * Determines if there are more elements
+         *
+         * @return True if there is another element, else false
+         */
+        public boolean hasNext()
+        {
+            return _index < (_size);
+        }
+
+
+        /**
+         * Fetches the next element if it exists
+         *
+         * @return Next element if hasNext returns true, else throws exception
+         */
+        public E next()
+        {
+            if (hasNext())
+            {
+                return get(_index++);
+            }
+
+            else
+            {
+                throw new NoSuchElementException("Error: Element not found");
+            }
+        }
+    }
+
+
     // Private Methods
     /**
      * Doubles the capacity of the backing array if size reaches capacity
@@ -248,9 +308,9 @@ public class ArrayList<E>
     @SuppressWarnings("unchecked")
     private void grow()
     {
-        if (_size == _backingArray.length && _size < Integer.MAX_VALUE / 2)
+        if (_size == _backingArray.length && _size <= (Integer.MAX_VALUE - 1) / 2)
         {
-            E[] tempArray = (E[]) new Object[_backingArray.length * 2];
+            E[] tempArray = (E[]) new Object[_backingArray.length * DOUBLE];
 
             for (int i = 0; i < _size; i++)
             {
