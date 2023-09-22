@@ -36,6 +36,7 @@ public class ArrayList<E>
      */
     @SuppressWarnings("unchecked")
     public ArrayList(int initialCapacity) throws IllegalArgumentException {
+        // TODO: Null parameter
         if (initialCapacity < LOW_BOUND) {
             throw new IllegalArgumentException("Error: Initial capacity must be greater than or equal to 0");
         } else if (initialCapacity == LOW_BOUND) {
@@ -57,6 +58,7 @@ public class ArrayList<E>
      * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
      */
     public void add(int index, E element) throws IndexOutOfBoundsException {
+        // TODO: Null parameter
         if (index < LOW_BOUND || index > _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         } else if (index == _size) {
@@ -82,6 +84,7 @@ public class ArrayList<E>
      * @return Boolean value based on success of method
      */
     public boolean add(E element) {
+        // TODO: Null parameter
         grow();
         _backingArray[_size] = element;
         _size += ITERATION;
@@ -109,6 +112,7 @@ public class ArrayList<E>
      * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
      */
     public E get(int index) throws IndexOutOfBoundsException {
+        // TODO: Null parameter
         if (index < LOW_BOUND || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         } else {
@@ -124,6 +128,7 @@ public class ArrayList<E>
      * @return The index value if element exists or -1 if element does not exist
      */
     public int indexOf(E element) {
+        // TODO: Null parameter
         int returnValue = DEFAULT_RETURN;
 
         for (int i = LOW_BOUND; i < _size && returnValue == -1; i++) {
@@ -154,11 +159,11 @@ public class ArrayList<E>
      * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
      */
     public E remove(int index) throws IndexOutOfBoundsException {
-        E returnIndex = _backingArray[index];
-
+        // TODO: Null parameters
         if (index < LOW_BOUND || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         } else {
+            E returnIndex = _backingArray[index];
             _size -= ITERATION;
 
             for (int i = LOW_BOUND; i < _size; i++) {
@@ -166,9 +171,8 @@ public class ArrayList<E>
             }
 
             set(_size, null);
+            return returnIndex;
         }
-
-        return returnIndex;
     }
 
 
@@ -181,15 +185,15 @@ public class ArrayList<E>
      * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
      */
     public E set(int index, E element) throws IndexOutOfBoundsException {
-        E returnIndex = _backingArray[index];
-
+        // TODO: Null parameters
         if (index < LOW_BOUND || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         } else {
+            E returnIndex = _backingArray[index];
             _backingArray[index] = element;
-        }
 
-        return returnIndex;
+            return returnIndex;
+        }
     }
 
 
