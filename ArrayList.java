@@ -13,7 +13,6 @@ public class ArrayList<E>
     private static final int DOUBLE = 2;
 
 
-
     // Instance Variables
     private int _size = 0;
     private int _capacity;
@@ -24,8 +23,7 @@ public class ArrayList<E>
     /**
      * Creates an instance of class ArrayList object with capacity of 10
      */
-    public ArrayList()
-    {
+    public ArrayList() {
         this(DEFAULT_CAPACITY);
     }
 
@@ -37,20 +35,13 @@ public class ArrayList<E>
      * @throws IllegalArgumentException Throws if initialCapacity input is invalid
      */
     @SuppressWarnings("unchecked")
-    public ArrayList(int initialCapacity) throws IllegalArgumentException
-    {
-        if (initialCapacity < LOW_BOUND)
-        {
+    public ArrayList(int initialCapacity) throws IllegalArgumentException {
+        if (initialCapacity < LOW_BOUND) {
             throw new IllegalArgumentException("Error: Initial capacity must be greater than or equal to 0");
-        }
-        else if (initialCapacity == LOW_BOUND)
-        {
+        } else if (initialCapacity == LOW_BOUND) {
             _capacity = DEFAULT_CAPACITY;
             _backingArray = (E[]) new Object[DEFAULT_CAPACITY];
-        }
-
-        else
-        {
+        } else {
             _capacity = initialCapacity;
             _backingArray = (E[]) new Object[initialCapacity];
         }
@@ -65,24 +56,15 @@ public class ArrayList<E>
      * @param element Element to insert into backing array
      * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
      */
-    public void add(int index, E element) throws IndexOutOfBoundsException
-    {
-        if (index < LOW_BOUND || index > _size)
-        {
+    public void add(int index, E element) throws IndexOutOfBoundsException {
+        if (index < LOW_BOUND || index > _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
-        }
-
-        else if (index == _size)
-        {
+        } else if (index == _size) {
             add(element);
-        }
-
-        else
-        {
+        } else {
             grow();
 
-            for (int i = _size; i > index; i--)
-            {
+            for (int i = _size; i > index; i--) {
                 E elementToAdd = get(i - ITERATION);
                 _backingArray[i] = elementToAdd;
             }
@@ -99,8 +81,7 @@ public class ArrayList<E>
      * @param element Element to append to array
      * @return Boolean value based on success of method
      */
-    public boolean add(E element)
-    {
+    public boolean add(E element) {
         grow();
         _backingArray[_size] = element;
         _size += ITERATION;
@@ -111,10 +92,8 @@ public class ArrayList<E>
     /**
      * Clears the backing array by nulling out each value and resets size to 0
      */
-    public void clear()
-    {
-        for (int i = LOW_BOUND; i < _size; i++)
-        {
+    public void clear() {
+        for (int i = LOW_BOUND; i < _size; i++) {
             add(i, null);
         }
 
@@ -129,15 +108,10 @@ public class ArrayList<E>
      * @return The element at the given index
      * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
      */
-    public E get(int index) throws IndexOutOfBoundsException
-    {
-        if (index < LOW_BOUND || index >= _size)
-        {
+    public E get(int index) throws IndexOutOfBoundsException {
+        if (index < LOW_BOUND || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
-        }
-
-        else
-        {
+        } else {
             return _backingArray[index];
         }
     }
@@ -149,14 +123,11 @@ public class ArrayList<E>
      * @param element Element to fetch index for
      * @return The index value if element exists or -1 if element does not exist
      */
-    public int indexOf(E element)
-    {
+    public int indexOf(E element) {
         int returnValue = DEFAULT_RETURN;
 
-        for (int i = LOW_BOUND; i < _size && returnValue == -1; i++)
-        {
-            if (element == _backingArray[i])
-            {
+        for (int i = LOW_BOUND; i < _size && returnValue == -1; i++) {
+            if (element == _backingArray[i]) {
                 returnValue = i;
             }
         }
@@ -170,8 +141,7 @@ public class ArrayList<E>
      *
      * @return Boolean value based on value of _size variable
      */
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return _size == LOW_BOUND;
     }
 
@@ -183,21 +153,15 @@ public class ArrayList<E>
      * @return The value of that index
      * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
      */
-    public E remove(int index) throws IndexOutOfBoundsException
-    {
+    public E remove(int index) throws IndexOutOfBoundsException {
         E returnIndex = _backingArray[index];
 
-        if (index < LOW_BOUND || index >= _size)
-        {
+        if (index < LOW_BOUND || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
-        }
-
-        else
-        {
+        } else {
             _size -= ITERATION;
 
-            for (int i = LOW_BOUND; i < _size; i++)
-            {
+            for (int i = LOW_BOUND; i < _size; i++) {
                 set(i, _backingArray[i + ITERATION]);
             }
 
@@ -216,17 +180,12 @@ public class ArrayList<E>
      * @return Previous element at specified index
      * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
      */
-    public E set(int index, E element) throws IndexOutOfBoundsException
-    {
+    public E set(int index, E element) throws IndexOutOfBoundsException {
         E returnIndex = _backingArray[index];
 
-        if (index < LOW_BOUND || index >= _size)
-        {
+        if (index < LOW_BOUND || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
-        }
-
-        else
-        {
+        } else {
             _backingArray[index] = element;
         }
 
@@ -239,8 +198,7 @@ public class ArrayList<E>
      *
      * @return The backing array's current size (_size)
      */
-    public int size()
-    {
+    public int size() {
         return _size;
     }
 
@@ -250,15 +208,12 @@ public class ArrayList<E>
      * Doubles the capacity of the backing array if size reaches capacity
      */
     @SuppressWarnings("unchecked")
-    private void grow()
-    {
-        if (_size == _capacity && _size < Integer.MAX_VALUE / 2)
-        {
+    private void grow() {
+        if (_size == _capacity && _size < Integer.MAX_VALUE / 2) {
             _capacity *= DOUBLE;
             E[] _tempArray = (E[]) new Object[_capacity];
 
-            for (int i = LOW_BOUND; i < _size; i++)
-            {
+            for (int i = LOW_BOUND; i < _size; i++) {
                 _tempArray[i] = _backingArray[i];
             }
 
