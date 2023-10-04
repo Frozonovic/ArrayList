@@ -13,9 +13,9 @@ public class ArrayList<E>
     private static final int DOUBLE = 2;
 
 
-    // Instance Variables
+    // Internal State
     private int _size = 0;
-    private int _capacity;
+    private static int _capacity;
     private E[] _backingArray;
 
 
@@ -32,13 +32,12 @@ public class ArrayList<E>
      * Creates an instance of class ArrayList object
      *
      * @param initialCapacity Starting capacity for new ArrayList instance
-     * @throws IllegalArgumentException Throws if initialCapacity input is invalid
      */
     @SuppressWarnings("unchecked")
-    public ArrayList(int initialCapacity) throws IllegalArgumentException {
-        // TODO: Null parameter
+    public ArrayList(int initialCapacity) {
+        // Quick Note: Primitive ints can't be initialized as null
         if (initialCapacity < LOW_BOUND) {
-            throw new IllegalArgumentException("Error: Initial capacity must be greater than or equal to 0");
+            throw new IllegalArgumentException("Error: Negative capacity is not allowed");
         } else if (initialCapacity == LOW_BOUND) {
             _capacity = DEFAULT_CAPACITY;
             _backingArray = (E[]) new Object[DEFAULT_CAPACITY];
@@ -55,10 +54,9 @@ public class ArrayList<E>
      *
      * @param index Index to insert element at
      * @param element Element to insert into backing array
-     * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
      */
-    public void add(int index, E element) throws IndexOutOfBoundsException {
-        // TODO: Null parameter
+    public void add(int index, E element) {
+        // Our ArrayList accepts nulls, thus given element can be null
         if (index < LOW_BOUND || index > _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         } else if (index == _size) {
@@ -84,10 +82,12 @@ public class ArrayList<E>
      * @return Boolean value based on success of method
      */
     public boolean add(E element) {
-        // TODO: Null parameter
+        // Our ArrayList accepts nulls, thus given element can be null
         grow();
+
         _backingArray[_size] = element;
         _size += ITERATION;
+
         return true;
     }
 
@@ -97,7 +97,7 @@ public class ArrayList<E>
      */
     public void clear() {
         for (int i = LOW_BOUND; i < _size; i++) {
-            add(i, null);
+            set(i, null);
         }
 
         _size = LOW_BOUND;
@@ -109,10 +109,8 @@ public class ArrayList<E>
      *
      * @param index Index of element to fetch
      * @return The element at the given index
-     * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
      */
-    public E get(int index) throws IndexOutOfBoundsException {
-        // TODO: Null parameter
+    public E get(int index) {
         if (index < LOW_BOUND || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         } else {
@@ -122,13 +120,12 @@ public class ArrayList<E>
 
 
     /**
-     * Fetches the index of a given element if it exists
+     * Fetches the index of the given element
      *
      * @param element Element to fetch index for
-     * @return The index value if element exists or -1 if element does not exist
+     * @return The index that the element first occurs at, else a negative integer
      */
     public int indexOf(E element) {
-        // TODO: Null parameter
         int returnValue = DEFAULT_RETURN;
 
         for (int i = LOW_BOUND; i < _size && returnValue == -1; i++) {
@@ -142,9 +139,9 @@ public class ArrayList<E>
 
 
     /**
-     * Determines if the backing array is empty or not
+     * Determines if there is anything stored in the ArrayList
      *
-     * @return Boolean value based on value of _size variable
+     * @return True if anything exists in the ArrayList, else false
      */
     public boolean isEmpty() {
         return _size == LOW_BOUND;
@@ -152,14 +149,12 @@ public class ArrayList<E>
 
 
     /**
-     * Removes an element at a given index and shuffles elements accordingly
+     * Removes the element at the given index
      *
      * @param index Index of element to remove
-     * @return The value of that index
-     * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
+     * @return The value of the removed element
      */
-    public E remove(int index) throws IndexOutOfBoundsException {
-        // TODO: Null parameters
+    public E remove(int index) {
         if (index < LOW_BOUND || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         } else {
@@ -177,30 +172,29 @@ public class ArrayList<E>
 
 
     /**
-     * Replaces the element at the specified index with the given element
+     * Updates an element in the ArrayList with a new element
      *
      * @param index Index of element to replace
-     * @param element New element to replace current element with
-     * @return Previous element at specified index
-     * @throws IndexOutOfBoundsException Throws error if index is not within backing array's range
+     * @param element New value to update the current element with
+     * @return The value of the previous element occupying that index
      */
-    public E set(int index, E element) throws IndexOutOfBoundsException {
+    public E set(int index, E element) {
         // TODO: Null parameters
         if (index < LOW_BOUND || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         } else {
-            E returnIndex = _backingArray[index];
+            E returnElement = _backingArray[index];
             _backingArray[index] = element;
 
-            return returnIndex;
+            return returnElement;
         }
     }
 
 
     /**
-     * Fetches the current size of the ArrayList object
+     * Fetches the current size of the ArrayList
      *
-     * @return The backing array's current size (_size)
+     * @return How many elements are in the current ArrayList
      */
     public int size() {
         return _size;
