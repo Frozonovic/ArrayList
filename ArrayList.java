@@ -7,9 +7,6 @@ public class ArrayList<E>
 {
     // Constants
     private static final int DEFAULT_CAPACITY = 10;
-    private static final int DEFAULT_RETURN = -1;
-    private static final int LOW_BOUND = 0;
-    private static final int ITERATION = 1;
     private static final int DOUBLE = 2;
 
 
@@ -35,10 +32,9 @@ public class ArrayList<E>
      */
     @SuppressWarnings("unchecked")
     public ArrayList(int initialCapacity) {
-        // Quick Note: Primitive ints can't be initialized as null
-        if (initialCapacity < LOW_BOUND) {
+        if (initialCapacity < 0) {
             throw new IllegalArgumentException("Error: Negative capacity is not allowed");
-        } else if (initialCapacity == LOW_BOUND) {
+        } else if (initialCapacity == 0) {
             _capacity = DEFAULT_CAPACITY;
             _backingArray = (E[]) new Object[DEFAULT_CAPACITY];
         } else {
@@ -56,8 +52,7 @@ public class ArrayList<E>
      * @param element Element to insert into backing array
      */
     public void add(int index, E element) {
-        // Our ArrayList accepts nulls, thus given element can be null
-        if (index < LOW_BOUND || index > _size) {
+        if (index < 0 || index > _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         } else if (index == _size) {
             add(element);
@@ -65,7 +60,7 @@ public class ArrayList<E>
             grow();
 
             for (int i = _size; i > index; i--) {
-                E elementToAdd = get(i - ITERATION);
+                E elementToAdd = get(i - 1);
                 _backingArray[i] = elementToAdd;
             }
 
@@ -82,7 +77,6 @@ public class ArrayList<E>
      * @return Boolean value based on success of method
      */
     public boolean add(E element) {
-        // Our ArrayList accepts nulls, thus given element can be null
         grow();
 
         _backingArray[_size] = element;
@@ -96,11 +90,11 @@ public class ArrayList<E>
      * Clears the backing array by nulling out each value and resets size to 0
      */
     public void clear() {
-        for (int i = LOW_BOUND; i < _size; i++) {
+        for (int i = 0; i < _size; i++) {
             set(i, null);
         }
 
-        _size = LOW_BOUND;
+        _size = 0;
     }
 
 
@@ -111,7 +105,7 @@ public class ArrayList<E>
      * @return The element at the given index
      */
     public E get(int index) {
-        if (index < LOW_BOUND || index >= _size) {
+        if (index < 0 || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         } else {
             return _backingArray[index];
@@ -126,9 +120,9 @@ public class ArrayList<E>
      * @return The index that the element first occurs at, else a negative integer
      */
     public int indexOf(E element) {
-        int returnValue = DEFAULT_RETURN;
+        int returnValue = -1;
 
-        for (int i = LOW_BOUND; i < _size && returnValue == -1; i++) {
+        for (int i = 0; i < _size && returnValue == -1; i++) {
             if (element == _backingArray[i]) {
                 returnValue = i;
             }
@@ -144,7 +138,7 @@ public class ArrayList<E>
      * @return True if anything exists in the ArrayList, else false
      */
     public boolean isEmpty() {
-        return _size == LOW_BOUND;
+        return _size == 0;
     }
 
 
@@ -155,17 +149,16 @@ public class ArrayList<E>
      * @return The value of the removed element
      */
     public E remove(int index) {
-        if (index < LOW_BOUND || index >= _size) {
+        if (index < 0 || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         } else {
             E returnIndex = _backingArray[index];
             _size--;
 
-            for (int i = LOW_BOUND; i < _size; i++) {
-                set(i, _backingArray[i + ITERATION]);
+            for (int i = 0; i < _size; i++) {
+                set(i, _backingArray[i + 1]);
             }
 
-            //
             _backingArray[_size] = null;
             return returnIndex;
         }
@@ -180,7 +173,7 @@ public class ArrayList<E>
      * @return The value of the previous element occupying that index
      */
     public E set(int index, E element) {
-        if (index < LOW_BOUND || index >= _size) {
+        if (index < 0 || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         } else {
             E returnElement = _backingArray[index];
@@ -211,7 +204,7 @@ public class ArrayList<E>
             _capacity *= DOUBLE;
             E[] _tempArray = (E[]) new Object[_capacity];
 
-            for (int i = LOW_BOUND; i < _size; i++) {
+            for (int i = 0; i < _size; i++) {
                 _tempArray[i] = _backingArray[i];
             }
 
