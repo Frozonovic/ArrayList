@@ -70,7 +70,7 @@ public class ArrayList<E>
             }
 
             _backingArray[index] = element;
-            _size ++;
+            _size++;
         }
     }
 
@@ -155,17 +155,18 @@ public class ArrayList<E>
      * @return The value of the removed element
      */
     public E remove(int index) {
-        if (index < LOW_BOUND || index > _size) {
+        if (index < LOW_BOUND || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         } else {
             E returnIndex = _backingArray[index];
-            _size -= ITERATION;
+            _size--;
 
             for (int i = LOW_BOUND; i < _size; i++) {
                 set(i, _backingArray[i + ITERATION]);
             }
 
-            set(_size, null);
+            //
+            _backingArray[_size] = null;
             return returnIndex;
         }
     }
@@ -179,7 +180,7 @@ public class ArrayList<E>
      * @return The value of the previous element occupying that index
      */
     public E set(int index, E element) {
-        if (index < LOW_BOUND || index > _size) {
+        if (index < LOW_BOUND || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
         } else {
             E returnElement = _backingArray[index];
