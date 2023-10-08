@@ -209,6 +209,8 @@ public class ArrayList<E>
             }
 
             _backingArray = _tempArray;
+        } else {
+            throw new OutOfMemoryError("Error: Integer limit reached");
         }
     }
 }
