@@ -200,7 +200,10 @@ public class ArrayList<E>
      */
     @SuppressWarnings("unchecked")
     private void grow() {
-        if (_size == _capacity && _size < Integer.MAX_VALUE / 2) {
+        if (_size == _capacity) {
+            if (!(_size < Integer.MAX_VALUE / 2)) {
+                throw new OutOfMemoryError("Error: Integer limit reached");
+            }
             _capacity *= DOUBLE;
             E[] _tempArray = (E[]) new Object[_capacity];
 
@@ -209,8 +212,6 @@ public class ArrayList<E>
             }
 
             _backingArray = _tempArray;
-        } else {
-            throw new OutOfMemoryError("Error: Integer limit reached");
         }
     }
 }
