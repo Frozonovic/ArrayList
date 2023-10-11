@@ -6,19 +6,18 @@ import java.util.NoSuchElementException;
 /**
  * A custom version ArrayList class modeled after default ArrayList class
  *
- * @author blee20@georgefox.edu
- * @param <E> The type of elements in this list
+ * @param <E>
  */
-public class ArrayList<E> implements Iterable<E>
+public class ArrayList<E>
 {
     // Constants
     private static final int DEFAULT_CAPACITY = 10;
-    private static final int NOT_FOUND = -1;
     private static final int DOUBLE = 2;
 
 
-    // Instance Variables
+    // Internal State
     private int _size = 0;
+    private static int _capacity;
     private E[] _backingArray;
 
 
@@ -26,8 +25,7 @@ public class ArrayList<E> implements Iterable<E>
     /**
      * Creates an instance of class ArrayList object with capacity of 10
      */
-    public ArrayList()
-    {
+    public ArrayList() {
         this(DEFAULT_CAPACITY);
     }
 
@@ -38,19 +36,14 @@ public class ArrayList<E> implements Iterable<E>
      * @param initialCapacity Starting capacity for new ArrayList instance
      */
     @SuppressWarnings("unchecked")
-    public ArrayList(int initialCapacity)
-    {
-        if (initialCapacity < 0)
-        {
-            throw new IllegalArgumentException("Error: Initial capacity must be greater than or" +
-                    "equal to 0");
-        }
-        else if (initialCapacity == 0)
-        {
+    public ArrayList(int initialCapacity) {
+        if (initialCapacity < 0) {
+            throw new IllegalArgumentException("Error: Negative capacity is not allowed");
+        } else if (initialCapacity == 0) {
+            _capacity = DEFAULT_CAPACITY;
             _backingArray = (E[]) new Object[DEFAULT_CAPACITY];
-        }
-        else
-        {
+        } else {
+            _capacity = initialCapacity;
             _backingArray = (E[]) new Object[initialCapacity];
         }
     }
@@ -63,30 +56,21 @@ public class ArrayList<E> implements Iterable<E>
      * @param index Index to insert element at
      * @param element Element to insert into backing array
      */
-    public void add(int index, E element)
-    {
-        if (index < 0 || index > _size)
-        {
+    public void add(int index, E element) {
+        if (index < 0 || index > _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
-        }
-        else if (index == _size)
-        {
-            grow();
-
+        } else if (index == _size) {
             add(element);
-        }
-        else
-        {
+        } else {
             grow();
 
-            for (int i = _size; i > index; i--)
-            {
+            for (int i = _size; i > index; i--) {
                 E elementToAdd = get(i - 1);
                 _backingArray[i] = elementToAdd;
             }
 
             _backingArray[index] = element;
-            _size += 1;
+            _size++;
         }
     }
 
@@ -97,12 +81,11 @@ public class ArrayList<E> implements Iterable<E>
      * @param element Element to append to array
      * @return Boolean value based on success of method
      */
-    public boolean add(E element)
-    {
+    public boolean add(E element) {
         grow();
 
         _backingArray[_size] = element;
-        _size += 1;
+        _size++;
 
         return true;
     }
@@ -111,10 +94,8 @@ public class ArrayList<E> implements Iterable<E>
     /**
      * Clears the backing array by nulling out each value and resets size to 0
      */
-    public void clear()
-    {
-        for (int i = 0; i < _size; i++)
-        {
+    public void clear() {
+        for (int i = 0; i < _size; i++) {
             set(i, null);
         }
 
@@ -128,33 +109,26 @@ public class ArrayList<E> implements Iterable<E>
      * @param index Index of element to fetch
      * @return The element at the given index
      */
-    public E get(int index)
-    {
-        if (index < 0 || index >= _size)
-        {
+    public E get(int index) {
+        if (index < 0 || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
-        }
-        else
-        {
+        } else {
             return _backingArray[index];
         }
     }
 
 
     /**
-     * Fetches the index of a given element if it exists
+     * Fetches the index of the given element
      *
      * @param element Element to fetch index for
-     * @return The index value if element exists or -1 if element does not exist
+     * @return The index that the element first occurs at, else a negative integer
      */
-    public int indexOf(E element)
-    {
-        int returnValue = NOT_FOUND;
+    public int indexOf(E element) {
+        int returnValue = -1;
 
-        for (int i = 0; i < _size && returnValue == NOT_FOUND; i++)
-        {
-            if (element == _backingArray[i])
-            {
+        for (int i = 0; i < _size && returnValue == -1; i++) {
+            if (element == _backingArray[i]) {
                 returnValue = i;
             }
         }
@@ -164,63 +138,50 @@ public class ArrayList<E> implements Iterable<E>
 
 
     /**
-     * Determines if the backing array is empty or not
+     * Determines if there is anything stored in the ArrayList
      *
-     * @return True if the collection is empty, else false
+     * @return True if anything exists in the ArrayList, else false
      */
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return _size == 0;
     }
 
 
     /**
-     * Removes an element at a given index and shuffles elements accordingly
+     * Removes the element at the given index
      *
      * @param index Index of element to remove
-     * @return The value of that index
+     * @return The value of the removed element
      */
-    public E remove(int index)
-    {
-        if (index < 0 || index >= _size)
-        {
+    public E remove(int index) {
+        if (index < 0 || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
-        }
-        else
-        {
-            E returnElement = _backingArray[index];
+        } else {
+            E returnIndex = _backingArray[index];
+            _size--;
 
-            for (int i = index; i < _size - 1; i++)
-            {
+            for (int i = 0; i < _size; i++) {
                 set(i, _backingArray[i + 1]);
             }
 
-            set(_size - 1, null);
-
-            _size--;
-
-            return returnElement;
+            _backingArray[_size] = null;
+            return returnIndex;
         }
     }
 
 
     /**
-     * Replaces the element at the specified index with the given element
+     * Updates an element in the ArrayList with a new element
      *
      * @param index Index of element to replace
-     * @param element New element to replace current element with
-     * @return Previous element at specified index
+     * @param element New value to update the current element with
+     * @return The value of the previous element occupying that index
      */
-    public E set(int index, E element)
-    {
-        if (index < 0 || index >= _size)
-        {
+    public E set(int index, E element) {
+        if (index < 0 || index >= _size) {
             throw new IndexOutOfBoundsException("Error: Must provide a valid index");
-        }
-        else
-        {
+        } else {
             E returnElement = _backingArray[index];
-
             _backingArray[index] = element;
 
             return returnElement;
@@ -229,12 +190,11 @@ public class ArrayList<E> implements Iterable<E>
 
 
     /**
-     * Fetches the current size of the ArrayList object
+     * Fetches the current size of the ArrayList
      *
-     * @return The backing array's current size (_size)
+     * @return How many elements are in the current ArrayList
      */
-    public int size()
-    {
+    public int size() {
         return _size;
     }
 
@@ -303,21 +263,22 @@ public class ArrayList<E> implements Iterable<E>
 
     // Private Methods
     /**
-     * Doubles the capacity of the backing array if size reaches capacity
+     * If size reaches ArrayList object capacity, double the capacity
      */
     @SuppressWarnings("unchecked")
-    private void grow()
-    {
-        if (_size == _backingArray.length && _size <= (Integer.MAX_VALUE - 1) / 2)
-        {
-            E[] tempArray = (E[]) new Object[_backingArray.length * DOUBLE];
+    private void grow() {
+        if (_size == _capacity) {
+            if (!(_size < Integer.MAX_VALUE / 2)) {
+                throw new OutOfMemoryError("Error: Integer limit reached");
+            }
+            _capacity *= DOUBLE;
+            E[] _tempArray = (E[]) new Object[_capacity];
 
-            for (int i = 0; i < _size; i++)
-            {
-                tempArray[i] = _backingArray[i];
+            for (int i = 0; i < _size; i++) {
+                _tempArray[i] = _backingArray[i];
             }
 
-            _backingArray = tempArray;
+            _backingArray = _tempArray;
         }
     }
 }
