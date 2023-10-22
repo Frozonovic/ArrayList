@@ -6,10 +6,9 @@ import java.util.NoSuchElementException;
 /**
  * A custom version ArrayList class modeled after default ArrayList class
  *
- * @param <E>
+ * @author blee20@georgefox.edu
  */
-public class ArrayList<E>
-{
+public class ArrayList<E> implements Iterable<E> {
     // Constants
     private static final int DEFAULT_CAPACITY = 10;
     private static final int DOUBLE = 2;
@@ -128,7 +127,9 @@ public class ArrayList<E>
         int returnValue = -1;
 
         for (int i = 0; i < _size && returnValue == -1; i++) {
-            if (element == _backingArray[i]) {
+            if (element != null && element.equals(_backingArray[i])) {
+                returnValue = i;
+            } else if (element == _backingArray[i]) {
                 returnValue = i;
             }
         }
@@ -204,8 +205,7 @@ public class ArrayList<E>
      *
      * @return An iterator of type E
      */
-    public Iterator<E> iterator()
-    {
+    public Iterator<E> iterator() {
         return new ArrayListIterator();
     }
 
@@ -213,8 +213,7 @@ public class ArrayList<E>
     /**
      * Private inner-class that adds support for enhanced for-loop notation
      */
-    private class ArrayListIterator implements Iterator<E>
-    {
+    private class ArrayListIterator implements Iterator<E> {
         // Instance Variables
         private int _index;
 
@@ -223,8 +222,7 @@ public class ArrayList<E>
         /**
          * Creates an instance of private inner-class ArrayListIterator object
          */
-        public ArrayListIterator()
-        {
+        public ArrayListIterator() {
             _index = 0;
         }
 
@@ -235,9 +233,8 @@ public class ArrayList<E>
          *
          * @return True if there is another element, else false
          */
-        public boolean hasNext()
-        {
-            return _index < (_size);
+        public boolean hasNext() {
+            return _index < _size;
         }
 
 
@@ -246,15 +243,10 @@ public class ArrayList<E>
          *
          * @return Next element if hasNext returns true, else throws exception
          */
-        public E next()
-        {
-            if (hasNext())
-            {
+        public E next() {
+            if (hasNext()) {
                 return get(_index++);
-            }
-
-            else
-            {
+            } else {
                 throw new NoSuchElementException("Error: Element not found");
             }
         }
@@ -271,14 +263,15 @@ public class ArrayList<E>
             if (!(_size < Integer.MAX_VALUE / 2)) {
                 throw new OutOfMemoryError("Error: Integer limit reached");
             }
+
             _capacity *= DOUBLE;
-            E[] _tempArray = (E[]) new Object[_capacity];
+            E[] tempArray = (E[]) new Object[_capacity];
 
             for (int i = 0; i < _size; i++) {
-                _tempArray[i] = _backingArray[i];
+                tempArray[i] = _backingArray[i];
             }
 
-            _backingArray = _tempArray;
+            _backingArray = tempArray;
         }
     }
 }
