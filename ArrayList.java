@@ -7,6 +7,8 @@ import java.util.NoSuchElementException;
  * A custom version ArrayList class modeled after default ArrayList class
  *
  * @author Frozonovic
+ * 
+ * @param E Type of elements in array
  */
 public class ArrayList<E> implements Iterable<E> {
     // Constants
