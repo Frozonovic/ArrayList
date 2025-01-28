@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 /**
  * A custom version ArrayList class modeled after default ArrayList class
  *
- * @author blee20@georgefox.edu
+ * @author Frozonovic
  */
 public class ArrayList<E> implements Iterable<E> {
     // Constants
