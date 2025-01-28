@@ -1,7 +1,7 @@
+
 // Imports
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
 
 /**
  * A custom version ArrayList class modeled after default ArrayList class
@@ -13,12 +13,10 @@ public class ArrayList<E> implements Iterable<E> {
     private static final int DEFAULT_CAPACITY = 10;
     private static final int DOUBLE = 2;
 
-
     // Internal State
     private int _size = 0;
     private static int _capacity;
     private E[] _backingArray;
-
 
     // Constructors
     /**
@@ -27,7 +25,6 @@ public class ArrayList<E> implements Iterable<E> {
     public ArrayList() {
         this(DEFAULT_CAPACITY);
     }
-
 
     /**
      * Creates an instance of class ArrayList object
@@ -47,12 +44,11 @@ public class ArrayList<E> implements Iterable<E> {
         }
     }
 
-
     // Instance Methods
     /**
      * Inserts an element at a designated index and shifts anything accordingly
      *
-     * @param index Index to insert element at
+     * @param index   Index to insert element at
      * @param element Element to insert into backing array
      */
     public void add(int index, E element) {
@@ -73,7 +69,6 @@ public class ArrayList<E> implements Iterable<E> {
         }
     }
 
-
     /**
      * Appends an element to the backing array
      *
@@ -89,7 +84,6 @@ public class ArrayList<E> implements Iterable<E> {
         return true;
     }
 
-
     /**
      * Clears the backing array by nulling out each value and resets size to 0
      */
@@ -100,7 +94,6 @@ public class ArrayList<E> implements Iterable<E> {
 
         _size = 0;
     }
-
 
     /**
      * Fetches the element at a given index
@@ -115,7 +108,6 @@ public class ArrayList<E> implements Iterable<E> {
             return _backingArray[index];
         }
     }
-
 
     /**
      * Fetches the index of the given element
@@ -137,7 +129,6 @@ public class ArrayList<E> implements Iterable<E> {
         return returnValue;
     }
 
-
     /**
      * Determines if there is anything stored in the ArrayList
      *
@@ -146,7 +137,6 @@ public class ArrayList<E> implements Iterable<E> {
     public boolean isEmpty() {
         return _size == 0;
     }
-
 
     /**
      * Removes the element at the given index
@@ -170,11 +160,10 @@ public class ArrayList<E> implements Iterable<E> {
         }
     }
 
-
     /**
      * Updates an element in the ArrayList with a new element
      *
-     * @param index Index of element to replace
+     * @param index   Index of element to replace
      * @param element New value to update the current element with
      * @return The value of the previous element occupying that index
      */
@@ -189,7 +178,6 @@ public class ArrayList<E> implements Iterable<E> {
         }
     }
 
-
     /**
      * Fetches the current size of the ArrayList
      *
@@ -198,7 +186,6 @@ public class ArrayList<E> implements Iterable<E> {
     public int size() {
         return _size;
     }
-
 
     /**
      * Creates a new iterator
@@ -209,14 +196,12 @@ public class ArrayList<E> implements Iterable<E> {
         return new ArrayListIterator();
     }
 
-
     /**
      * Private inner-class that adds support for enhanced for-loop notation
      */
     private class ArrayListIterator implements Iterator<E> {
         // Instance Variables
         private int _index;
-
 
         // Constructor
         /**
@@ -225,7 +210,6 @@ public class ArrayList<E> implements Iterable<E> {
         public ArrayListIterator() {
             _index = 0;
         }
-
 
         // Instance Methods
         /**
@@ -236,7 +220,6 @@ public class ArrayList<E> implements Iterable<E> {
         public boolean hasNext() {
             return _index < _size;
         }
-
 
         /**
          * Fetches the next element if it exists
@@ -251,7 +234,6 @@ public class ArrayList<E> implements Iterable<E> {
             }
         }
     }
-
 
     // Private Methods
     /**
