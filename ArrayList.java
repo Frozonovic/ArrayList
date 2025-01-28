@@ -3,18 +3,15 @@
  *
  * @param <E>
  */
-public class ArrayList<E>
-{
+public class ArrayList<E> {
     // Constants
     private static final int DEFAULT_CAPACITY = 10;
     private static final int DOUBLE = 2;
-
 
     // Internal State
     private int _size = 0;
     private static int _capacity;
     private E[] _backingArray;
-
 
     // Constructors
     /**
@@ -23,7 +20,6 @@ public class ArrayList<E>
     public ArrayList() {
         this(DEFAULT_CAPACITY);
     }
-
 
     /**
      * Creates an instance of class ArrayList object
@@ -43,12 +39,11 @@ public class ArrayList<E>
         }
     }
 
-
     // Instance Methods
     /**
      * Inserts an element at a designated index and shifts anything accordingly
      *
-     * @param index Index to insert element at
+     * @param index   Index to insert element at
      * @param element Element to insert into backing array
      */
     public void add(int index, E element) {
@@ -69,7 +64,6 @@ public class ArrayList<E>
         }
     }
 
-
     /**
      * Appends an element to the backing array
      *
@@ -85,7 +79,6 @@ public class ArrayList<E>
         return true;
     }
 
-
     /**
      * Clears the backing array by nulling out each value and resets size to 0
      */
@@ -96,7 +89,6 @@ public class ArrayList<E>
 
         _size = 0;
     }
-
 
     /**
      * Fetches the element at a given index
@@ -111,7 +103,6 @@ public class ArrayList<E>
             return _backingArray[index];
         }
     }
-
 
     /**
      * Fetches the index of the given element
@@ -131,7 +122,6 @@ public class ArrayList<E>
         return returnValue;
     }
 
-
     /**
      * Determines if there is anything stored in the ArrayList
      *
@@ -140,7 +130,6 @@ public class ArrayList<E>
     public boolean isEmpty() {
         return _size == 0;
     }
-
 
     /**
      * Removes the element at the given index
@@ -164,11 +153,10 @@ public class ArrayList<E>
         }
     }
 
-
     /**
      * Updates an element in the ArrayList with a new element
      *
-     * @param index Index of element to replace
+     * @param index   Index of element to replace
      * @param element New value to update the current element with
      * @return The value of the previous element occupying that index
      */
@@ -183,7 +171,6 @@ public class ArrayList<E>
         }
     }
 
-
     /**
      * Fetches the current size of the ArrayList
      *
@@ -192,7 +179,6 @@ public class ArrayList<E>
     public int size() {
         return _size;
     }
-
 
     // Private Methods
     /**
